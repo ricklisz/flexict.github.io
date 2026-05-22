@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FlexiCT</title>
+    <meta
+      name="description"
+      content="FlexiCT project page: universal CT representations from anatomy to disease phenotype through agglomerative pretraining."
+    >
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17212b;
+        --muted: #596674;
+        --line: #d7dde4;
+        --paper: #ffffff;
+        --soft: #f4f7f9;
+        --blue: #245b7b;
+        --teal: #14706b;
+        --red: #c9312a;
+        --gold: #a16b16;
+        --shadow: 0 18px 55px rgba(24, 35, 47, 0.11);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background: var(--soft);
+        color: var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 247, 249, 0.98) 46%, #ffffff 100%),
+          linear-gradient(135deg, rgba(36, 91, 123, 0.14), rgba(201, 49, 42, 0.07) 42%, rgba(20, 112, 107, 0.11));
+      }
+
+      a {
+        color: inherit;
+      }
+
+      img,
+      video {
+        display: block;
+        max-width: 100%;
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .hero {
+        min-height: 58vh;
+        display: flex;
+        align-items: center;
+        padding: 72px 0 58px;
+        text-align: center;
+      }
+
+      .hero-inner {
+        width: 100%;
+        max-width: 980px;
+      }
+
+      .kicker {
+        margin: 0 0 12px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--red);
+        text-transform: uppercase;
+        letter-spacing: 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 14px;
+        font-size: clamp(48px, 8.4vw, 104px);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        max-width: 860px;
+        margin: 0 auto 22px;
+        color: #243443;
+        font-size: clamp(20px, 2.7vw, 31px);
+        line-height: 1.2;
+        font-weight: 680;
+      }
+
+      .authors {
+        max-width: 920px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 8px;
+        color: #2f3f4e;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .authors strong {
+        color: var(--ink);
+        font-weight: 760;
+      }
+
+      .authors sup,
+      .affiliations sup,
+      .note sup {
+        color: var(--red);
+        font-weight: 760;
+      }
+
+      .note {
+        max-width: 820px;
+        margin: 8px auto 24px;
+        color: #6d7782;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .affiliations {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 8px;
+        color: #66727e;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .affiliations span {
+        display: inline-block;
+        margin: 0 7px 4px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .action {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 17px;
+        border: 1px solid #bec9d3;
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.76);
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 720;
+        box-shadow: 0 10px 28px rgba(24, 35, 47, 0.08);
+        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      }
+
+      .action:hover {
+        transform: translateY(-1px);
+        border-color: var(--blue);
+        background: #ffffff;
+      }
+
+      .action.disabled {
+        color: #7b8793;
+        cursor: not-allowed;
+        border-color: #d7dde4;
+        background: rgba(255, 255, 255, 0.54);
+        box-shadow: none;
+      }
+
+      .action.disabled::after {
+        content: "Coming soon";
+        margin-left: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: #edf1f4;
+        color: #66727e;
+        font-size: 11px;
+        font-weight: 760;
+      }
+
+      main {
+        background: #ffffff;
+      }
+
+      section {
+        padding: 66px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      section:first-child {
+        border-top: 0;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(160px, 0.34fr) minmax(0, 0.66fr);
+        gap: 36px;
+        align-items: start;
+        margin-bottom: 28px;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-size: clamp(28px, 4.5vw, 44px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        color: #334554;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .body-copy {
+        display: grid;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .overview-layout {
+        display: grid;
+        gap: 28px;
+      }
+
+      .overview-copy {
+        max-width: 920px;
+      }
+
+      .overview-figure,
+      .result-stage {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--paper);
+      }
+
+      .overview-figure {
+        box-shadow: var(--shadow);
+      }
+
+      .overview-figure img,
+      .result-stage img {
+        width: 100%;
+        height: auto;
+        background: #ffffff;
+      }
+
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .metric {
+        min-height: 92px;
+        padding: 16px;
+        border-left: 4px solid var(--blue);
+        background: #f7fafb;
+      }
+
+      .metric:nth-child(2) {
+        border-left-color: var(--red);
+      }
+
+      .metric:nth-child(3) {
+        border-left-color: var(--teal);
+      }
+
+      .metric span {
+        display: block;
+        color: var(--ink);
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .metric p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .demo-list {
+        display: grid;
+        gap: 26px;
+      }
+
+      .demo-item {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.34fr) minmax(0, 0.66fr);
+        gap: 22px;
+        align-items: start;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfcfd;
+      }
+
+      .demo-copy h3 {
+        margin-bottom: 9px;
+        font-size: 20px;
+        line-height: 1.2;
+      }
+
+      .demo-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .video-frame {
+        overflow: hidden;
+        border: 1px solid #ccd5dd;
+        border-radius: 8px;
+        background: #0f1720;
+      }
+
+      video {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: contain;
+        background: #0f1720;
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .tab {
+        min-height: 38px;
+        padding: 0 13px;
+        border: 1px solid #c6d0da;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #314352;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 720;
+        cursor: pointer;
+      }
+
+      .tab:hover {
+        border-color: var(--blue);
+      }
+
+      .tab[aria-selected="true"] {
+        border-color: var(--red);
+        background: #fff5f3;
+        color: #961b16;
+      }
+
+      .result-stage {
+        box-shadow: 0 16px 38px rgba(24, 35, 47, 0.08);
+      }
+
+      .result-caption {
+        min-height: 84px;
+        padding: 17px 18px 20px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .result-caption strong {
+        color: var(--ink);
+      }
+
+      .ack,
+      .citation {
+        max-width: 900px;
+      }
+
+      .ack p {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      pre {
+        overflow: auto;
+        margin: 0;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #17212b;
+        color: #f5f7fa;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      footer {
+        padding: 34px 0 46px;
+        background: #ffffff;
+        color: #6b7580;
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+      }
+
+      @media (max-width: 860px) {
+        .shell {
+          width: min(100% - 28px, 1120px);
+        }
+
+        .hero {
+          min-height: auto;
+          padding: 38px 0 28px;
+        }
+
+        .section-head,
+        .demo-item {
+          grid-template-columns: 1fr;
+        }
+
+        section {
+          padding: 48px 0;
+        }
+
+        .section-head {
+          gap: 14px;
+        }
+
+        .metric-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .actions,
+        .tabs {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .action,
+        .tab {
+          width: 100%;
+        }
+
+        .action.disabled::after {
+          display: none;
+        }
+
+        .subtitle {
+          font-size: 20px;
+        }
+
+        .lead {
+          font-size: 16px;
+        }
+
+        .demo-item {
+          padding: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="shell hero-inner">
+        <p class="kicker">CT foundation model family</p>
+        <h1>FlexiCT</h1>
+        <p class="subtitle">
+          Universal CT Representations from Anatomy to Disease Phenotype through Agglomerative Pretraining
+        </p>
+        <p class="authors">
+          <strong>Yuheng Li</strong><sup>1,&dagger;</sup>,
+          <strong>Yuan Gao</strong><sup>2,&dagger;</sup>,
+          Haoyu Dong<sup>3</sup>,
+          Yuxiang Lai<sup>2</sup>,
+          Shansong Wang<sup>2</sup>,
+          Mojtaba Safari<sup>2</sup>,
+          James E. Baciak<sup>4,*</sup>,
+          Xiaofeng Yang<sup>1,2,*</sup>
+        </p>
+        <p class="affiliations">
+          <span><sup>1</sup>Georgia Institute of Technology</span>
+          <span><sup>2</sup>Emory University</span>
+          <span><sup>3</sup>Duke University</span>
+          <span><sup>4</sup>University of Florida</span>
+        </p>
+        <p class="note">
+          <sup>&dagger;</sup>These authors contributed equally to this work.
+          <sup>*</sup>Corresponding authors:
+          <a href="mailto:jebaciak@mse.ufl.edu">jebaciak@mse.ufl.edu</a>,
+          <a href="mailto:xiaofeng.yang@emory.edu">xiaofeng.yang@emory.edu</a>
+        </p>
+        <nav class="actions" aria-label="Project links">
+          <a class="action" href="https://arxiv.org/abs/2605.21906" target="_blank" rel="noopener">Paper</a>
+          <a class="action" href="https://github.com/ricklisz/FlexiCT" target="_blank" rel="noopener">Code</a>
+          <a class="action" href="https://github.com/ricklisz/FlexiCT#checkpoints" target="_blank" rel="noopener">Checkpoints</a>
+          <a class="action disabled" href="#" aria-disabled="true">HF Models</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="overview">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Overview</h2>
+          </div>
+          <div class="overview-layout">
+            <div class="overview-copy body-copy">
+              <p class="lead">
+                FlexiCT is trained on 266,227 CT volumes from 56 public datasets and evaluated
+                across the clinical CT workflow: segmentation, registration, classification,
+                tumor phenotype retrieval, and vision-language understanding.
+              </p>
+              <p>
+                The model family is built through agglomerative continual pretraining. Phase 1
+                learns slice-level anatomy with a DINO-style self-supervised objective. Phase 2
+                inflates the encoder into 3D and continues volumetric pretraining. Phase 3 aligns
+                3D image representations with clinical reports through contrastive language
+                supervision.
+              </p>
+              <p>
+                This sequential lineage produces three checkpoints: FlexiCT-2D for dense
+                slice-level anatomy, FlexiCT-3D for volumetric reasoning, and FlexiCT-3D-VLM for
+                text-guided disease recognition and cross-modal retrieval.
+              </p>
+              <div class="metric-strip" aria-label="FlexiCT summary metrics">
+                <div class="metric">
+                  <span>266k</span>
+                  <p>public CT volumes assembled for pretraining</p>
+                </div>
+                <div class="metric">
+                  <span>56</span>
+                  <p>datasets spanning body regions and disease families</p>
+                </div>
+                <div class="metric">
+                  <span>18</span>
+                  <p>benchmarks across five downstream task families</p>
+                </div>
+              </div>
+            </div>
+            <figure class="overview-figure">
+              <img
+                src="assets/images/fig_overview.png"
+                alt="Dataset statistics and three-stage pretraining strategy of FlexiCT."
+              >
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="demo">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Demo</h2>
+            <p class="lead">
+              The demos show how FlexiCT features expose anatomical correspondence, similarity
+              structure, and zero-shot localization behavior directly from pretrained embeddings.
+            </p>
+          </div>
+          <div class="demo-list">
+            <article class="demo-item">
+              <div class="demo-copy">
+                <h3>Whole-body PCA Feature Maps</h3>
+                <p>
+                  Triplanar PCA projections visualize dense patch features learned by FlexiCT,
+                  revealing organ boundaries and spatially coherent anatomical regions without
+                  task-specific supervision.
+                </p>
+              </div>
+              <div class="video-frame">
+                <video controls muted playsinline preload="metadata" poster="assets/images/demo1_poster.jpg?v=20260521-demo-refresh-2">
+                  <source src="assets/videos/demo1_triplanar_pca.mp4?v=20260521-demo-refresh-2" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </article>
+
+            <article class="demo-item">
+              <div class="demo-copy">
+                <h3>Axial Similarity Maps</h3>
+                <p>
+                  Multi-point similarity maps highlight how reference features propagate across a
+                  CT volume, providing a view of the learned representation's anatomical matching
+                  behavior.
+                </p>
+              </div>
+              <div class="video-frame">
+                <video controls muted playsinline preload="metadata" poster="assets/images/demo2_poster.jpg?v=20260521-demo-refresh-2">
+                  <source src="assets/videos/demo2_multi_point_similarity.mp4?v=20260521-demo-refresh-2" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </article>
+
+            <article class="demo-item">
+              <div class="demo-copy">
+                <h3>Zero-Shot Segmentation</h3>
+                <p>
+                  Dense visual features prompted with point query can localize anatomical or
+                  disease-related regions without fitting a new segmentation model.
+                </p>
+              </div>
+              <div class="video-frame">
+                <video controls muted playsinline preload="metadata" poster="assets/images/demo3_poster.jpg?v=20260521-demo-refresh-2">
+                  <source src="assets/videos/demo3_zero_shot_segmentation.mp4?v=20260521-demo-refresh-2" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="results">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Results</h2>
+            <p class="lead">
+              FlexiCT is evaluated along the hierarchy of CT interpretation, from anatomy and
+              spatial correspondence to disease characterization, phenotype retrieval, and
+              language-grounded clinical reasoning.
+            </p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Result figures">
+            <button class="tab" type="button" role="tab" aria-selected="true" data-result="segmentation">
+              Organ/tumor segmentation
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-result="registration">
+              Registration
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-result="classification">
+              Disease classification
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-result="phenotype">
+              Phenotype retrieval
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-result="vlm">
+              Vision language tasks
+            </button>
+          </div>
+          <figure class="result-stage">
+            <img
+              id="result-image"
+              src="assets/images/fig_2.png"
+              alt="FlexiCT segmentation benchmark results across organ and tumor datasets."
+            >
+            <figcaption id="result-caption" class="result-caption">
+              <strong>Organ/tumor segmentation.</strong> FlexiCT-3D and FlexiCT-2D transfer to
+              volumetric and slice-level segmentation benchmarks spanning abdominal organs,
+              thoracic structures, whole-body anatomy, and tumors.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="acknowledgements">
+        <div class="shell ack">
+          <div class="section-head">
+            <h2>Acknowledgements</h2>
+          </div>
+          <p>
+            This research is supported in part by the National Institutes of Health under Award
+            Number R01EB032680, R01DE033512, R01CA272991, and U54CA274513. The authors acknowledge
+            University of Florida Information Technology Research Computing for computational
+            resources and support provided through the HiPerGator supercomputing cluster.
+          </p>
+        </div>
+      </section>
+
+      <section id="citation">
+        <div class="shell citation">
+          <div class="section-head">
+            <h2>Citation</h2>
+            <p class="lead">
+              Please cite the arXiv preprint.
+            </p>
+          </div>
+          <pre><code>@misc{li2026universalctrepresentations,
+  title = {Universal CT Representations from Anatomy to Disease Phenotype through Agglomerative Pretraining},
+  author = {Yuheng Li and Yuan Gao and Haoyu Dong and Yuxiang Lai and Shansong Wang and Mojtaba Safari and James E. Baciak and Xiaofeng Yang},
+  year = {2026},
+  eprint = {2605.21906},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CV},
+  doi = {10.48550/arXiv.2605.21906},
+  url = {https://arxiv.org/abs/2605.21906}
+}</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell">FlexiCT project page. Paper and code are available now.</div>
+    </footer>
+
+    <script>
+      const results = {
+        segmentation: {
+          src: "assets/images/fig_2.png",
+          alt: "FlexiCT segmentation benchmark results across organ and tumor datasets.",
+          caption:
+            "<strong>Organ/tumor segmentation.</strong> FlexiCT-3D and FlexiCT-2D transfer to volumetric and slice-level segmentation benchmarks spanning abdominal organs, thoracic structures, whole-body anatomy, and tumors."
+        },
+        registration: {
+          src: "assets/images/fig_3.png",
+          alt: "FlexiCT training-free intra-modal and cross-modal abdominal registration results.",
+          caption:
+            "<strong>Registration.</strong> FlexiCT-2D supports training-free CT-to-CT and CT-to-MR abdominal registration, indicating dense spatial features that preserve anatomical correspondence across modalities."
+        },
+        classification: {
+          src: "assets/images/fig_4.png",
+          alt: "FlexiCT label-efficient disease classification results from frozen representations.",
+          caption:
+            "<strong>Disease classification.</strong> Frozen FlexiCT-2D features support label-efficient classification across renal tumor subtyping, lesion classification, pulmonary nodule detection, and COVID-19 identification."
+        },
+        phenotype: {
+          src: "assets/images/fig_phenotype.png",
+          alt: "FlexiCT tumor phenotype retrieval and severity embedding results.",
+          caption:
+            "<strong>Phenotype retrieval.</strong> FlexiCT-3D embeddings organize tumor cases along clinically meaningful severity axes for lung cancer T-stage and renal cell carcinoma ISUP grade."
+        },
+        vlm: {
+          src: "assets/images/fig_vlm.png",
+          alt: "FlexiCT vision-language zero-shot disease classification and report retrieval results.",
+          caption:
+            "<strong>Vision language tasks.</strong> FlexiCT-3D-VLM aligns CT volumes with clinical text for zero-shot disease classification and semantic report retrieval across chest and abdominal CT benchmarks."
+        }
+      };
+
+      const buttons = document.querySelectorAll(".tab[data-result]");
+      const resultImage = document.getElementById("result-image");
+      const resultCaption = document.getElementById("result-caption");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const key = button.dataset.result;
+          const result = results[key];
+          if (!result) return;
+
+          buttons.forEach((item) => item.setAttribute("aria-selected", "false"));
+          button.setAttribute("aria-selected", "true");
+          resultImage.src = result.src;
+          resultImage.alt = result.alt;
+          resultCaption.innerHTML = result.caption;
+        });
+      });
+
+      document.querySelectorAll(".action.disabled").forEach((link) => {
+        link.addEventListener("click", (event) => event.preventDefault());
+      });
+    </script>
+  </body>
+</html>
